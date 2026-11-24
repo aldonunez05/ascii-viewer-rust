@@ -16,9 +16,14 @@ impl Camera {
         let aspect = width as f32 / (height as f32 * 2.0);
         let proj = Mat4::perspective_rh(self.fov, aspect, 0.1, 100.0);
         let view = Mat4::look_at_rh(Vec3::new(0.0, 0.0, self.distance), Vec3::ZERO, Vec3::Y);
-        let model = Mat4::from_rotation_x(self.pitch) * Mat4::from_rotation_y(self.yaw);
+        let model = self.rotation(); 
         proj * view * model
     }
+
+    pub fn rotation(&self) -> Mat4 {
+        Mat4::from_rotation_x(self.pitch) * Mat4::from_rotation_y(self.yaw)
+    }
+
 
 }
 pub fn project(mvp: Mat4, v: Vec3, width: usize, height: usize) -> Vec3 {
