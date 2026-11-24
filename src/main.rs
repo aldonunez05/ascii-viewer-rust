@@ -1,4 +1,5 @@
 mod model;
+mod raster;
 mod canvas;
 mod triangularization;
 
@@ -8,12 +9,10 @@ fn main() {
     let mut m = model::Model::load_obj("../models/cube.obj").unwrap();
     println!("{} vertices, {} faces, {} triangles", m.vertices.len(), m.faces.len(), m.triangles().len());
     m.normalize();
-    let mut c = canvas::Canvas::new(20, 5);
-    for x in 0..20 {
-        c.set(x, 2, 1.0, '-');
-    }
-    c.set(10, 0, 1.0, '*');
-    c.set(10, 4, 1.0, '*');
-    c.set(10, 2, 0.5, '+');   // closer than the '-', wins
+    let mut c = canvas::Canvas::new(40, 15);
+    raster::draw_triangle(&mut c,
+        Vec3::new(2.0, 1.0, 5.0), Vec3::new(30.0, 3.0, 5.0), Vec3::new(8.0, 13.0, 5.0), '#');
+    raster::draw_triangle(&mut c,
+        Vec3::new(15.0, 2.0, 1.0), Vec3::new(38.0, 8.0, 1.0), Vec3::new(12.0, 14.0, 1.0), '.');
     print!("{c}");
 }
