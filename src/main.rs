@@ -4,12 +4,6 @@ mod triangularization;
 use glam::Vec3;
 
 fn main() {
-    let square = [
-        Vec3::new(0.0, 0.0, 0.0),
-        Vec3::new(1.0, 0.0, 0.0),
-        Vec3::new(1.0, 1.0, 0.0),
-        Vec3::new(0.0, 1.0, 0.0),
-    ];
-    let tris = triangularization::triangularize(&square);
-    println!("{:?}", tris);
+    let m = model::Model::load_obj("../models/cube.obj").unwrap();
+    println!("{} vertices, {} faces, {} triangles", m.vertices.len(), m.faces.len(), m.triangles().len());
 }
