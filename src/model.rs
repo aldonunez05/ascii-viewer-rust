@@ -1,13 +1,23 @@
-struct Model{
-    faces: Vec<Face>,
-    vertexes: Vec<Vec3>,
-    materials: Vec<Material>,
+use glam::Vec3;
+
+#[derive(Debug, Clone)]
+pub struct Material{
+    pub name: String,
+    pub color: Vec3,
 }
 
-fn model_init() -> Box<Model>{
-    Box::new(Model{
-        faces: Vec::with_capacity(1),
-        vertexes: Vec::with_capacity(1),
-        materials: Vec::with_capacity(1),
-    })
+#[derive(Debug, Clone)]
+pub struct Face {
+    pub vertices: Vec<usize>,
+    pub materials: Option<usize>,
 }
+
+
+#[derive(Debug, Clone)]
+pub struct Model{
+    pub vertices: Vec<Vec3>,
+    pub faces: Vec<Face>,
+    pub materials: Vec<Material>,
+}
+
+

@@ -1,3 +1,4 @@
+mod model;
 mod triangularization;
 
 use glam::Vec3;
