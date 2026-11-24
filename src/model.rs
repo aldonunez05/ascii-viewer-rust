@@ -79,6 +79,29 @@ impl Model {
         }
         Ok(model)
     }
+
+    pub fn bounds(&self) -> Option<(Vec3, Vec3)> {
+        let first = *self.vertices.first()?;
+        let mut lo = first;
+        let mut hi = first;
+        for &v in &self.vertices {
+            lo = lo.min(v);
+            hi = hi.max(v);
+        }
+        Some((lo, hi))
+    }
+
+    pub fn normalize(&mut self){
+        let Some((lo, hi)) = self.bounds() else { return };
+        let center = (lo + hi) / 2.0;
+        let half = ((hi - lo) / 2.0).max_element();
+        if half == 0.0 {
+            return;
+        }
+        for v in &mut self.vertices {
+            *v = (*v - center) / half;
+        }
+    }
 }
 
 
