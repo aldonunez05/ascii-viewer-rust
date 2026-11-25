@@ -11,7 +11,12 @@ use std::time::Duration;
 
 use glam::Vec3;
 
-fn render(m: &model::Model, tris: &[[usize; 3]], cam: &camera::Camera, screen: &mut canvas::Canvas) {
+fn render(
+    m: &model::Model,
+    tris: &[[usize; 3]],
+    cam: &camera::Camera,
+    screen: &mut canvas::Canvas,
+) {
     let (w, h) = (screen.width, screen.height);
     let mvp = cam.matrix(w, h);
     let rot = cam.rotation();
@@ -30,7 +35,9 @@ fn render(m: &model::Model, tris: &[[usize; 3]], cam: &camera::Camera, screen: &
 }
 
 fn main() -> Result<(), String> {
-    let path = std::env::args().nth(1).unwrap_or_else(|| "../models/cube.obj".to_string());
+    let path = std::env::args()
+        .nth(1)
+        .unwrap_or_else(|| "../models/cube.obj".to_string());
 
     let mut m = model::Model::load_obj(&path)?;
     m.normalize();

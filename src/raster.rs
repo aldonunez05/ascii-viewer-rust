@@ -1,13 +1,13 @@
-use glam::Vec3;
 use crate::canvas::Canvas;
+use glam::Vec3;
 
 fn edge(a: Vec3, b: Vec3, p: Vec3) -> f32 {
     (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x)
 }
 
-pub fn draw_triangle(canvas: &mut Canvas, a: Vec3, b: Vec3, c: Vec3, ch: char){
+pub fn draw_triangle(canvas: &mut Canvas, a: Vec3, b: Vec3, c: Vec3, ch: char) {
     let area = edge(a, b, c);
-    if area == 0.0{
+    if area == 0.0 {
         return;
     }
     let min_x = a.x.min(b.x).min(c.x).floor().max(0.0) as i32;
@@ -15,8 +15,8 @@ pub fn draw_triangle(canvas: &mut Canvas, a: Vec3, b: Vec3, c: Vec3, ch: char){
     let min_y = a.y.min(b.y).min(c.y).floor().max(0.0) as i32;
     let max_y = a.y.max(b.y).max(c.y).ceil().min(canvas.height as f32 - 1.0) as i32;
 
-    for y in min_y..=max_y{
-        for x in min_x..=max_x{
+    for y in min_y..=max_y {
+        for x in min_x..=max_x {
             let p = Vec3::new(x as f32 + 0.5, y as f32 + 0.5, 0.0);
             let w0 = edge(b, c, p) / area;
             let w1 = edge(c, a, p) / area;

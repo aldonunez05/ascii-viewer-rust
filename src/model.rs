@@ -1,8 +1,9 @@
-use glam::Vec3;
 use crate::triangularization::triangularize;
+use glam::Vec3;
 
 #[derive(Debug, Clone)]
-pub struct Material{
+#[allow(dead_code)]
+pub struct Material {
     pub name: String,
     pub color: Vec3,
 }
@@ -13,9 +14,8 @@ pub struct Face {
     pub material: Option<usize>,
 }
 
-
 #[derive(Debug, Default)]
-pub struct Model{
+pub struct Model {
     pub vertices: Vec<Vec3>,
     pub faces: Vec<Face>,
     pub materials: Vec<Material>,
@@ -30,9 +30,13 @@ impl Model {
         self.vertices.push(v);
         self.vertices.len() - 1
     }
-    
-    pub fn add_face(&mut self, vertices: Vec<usize>, material: Option<usize>) -> Result<(), String>{
-        self.faces.push(Face {vertices, material});
+
+    pub fn add_face(
+        &mut self,
+        vertices: Vec<usize>,
+        material: Option<usize>,
+    ) -> Result<(), String> {
+        self.faces.push(Face { vertices, material });
         Ok(())
     }
 
@@ -42,7 +46,11 @@ impl Model {
             let pts: Vec<Vec3> = face.vertices.iter().map(|&i| self.vertices[i]).collect();
             let local = triangularize(&pts);
             for t in local.chunks_exact(3) {
-                out.push([face.vertices[t[0]], face.vertices[t[1]], face.vertices[t[2]]]);
+                out.push([
+                    face.vertices[t[0]],
+                    face.vertices[t[1]],
+                    face.vertices[t[2]],
+                ]);
             }
         }
         out
@@ -57,10 +65,13 @@ impl Model {
             match parts.next() {
                 Some("v") => {
                     let mut nums = Vec::new();
-                    for s in parts{
-                        nums.push(s.parse::<f32>().map_err(|e| format!("bad num '{s}': {e}"))?);
+                    for s in parts {
+                        nums.push(
+                            s.parse::<f32>()
+                                .map_err(|e| format!("bad num '{s}': {e}"))?,
+                        );
                     }
-                    if nums.len() < 3{
+                    if nums.len() < 3 {
                         return Err(format!("verex needs 3 nums: {line}"));
                     }
                     model.add_vertex(Vec3::new(nums[0], nums[1], nums[2]));
@@ -69,7 +80,9 @@ impl Model {
                     let mut idxs = Vec::new();
                     for part in parts {
                         let first = part.split('/').next().unwrap();
-                        let n: usize = first.parse().map_err(|e| format! ("bad face index"))?;
+                        let n: usize = first
+                            .parse()
+                            .map_err(|e| format!("bad face index '{part}': {e}"))?;
                         idxs.push(n - 1);
                     }
                     model.add_face(idxs, None)?;
@@ -91,8 +104,10 @@ impl Model {
         Some((lo, hi))
     }
 
-    pub fn normalize(&mut self){
-        let Some((lo, hi)) = self.bounds() else { return };
+    pub fn normalize(&mut self) {
+        let Some((lo, hi)) = self.bounds() else {
+            return;
+        };
         let center = (lo + hi) / 2.0;
         let half = ((hi - lo) / 2.0).max_element();
         if half == 0.0 {
@@ -103,5 +118,3 @@ impl Model {
         }
     }
 }
-
-

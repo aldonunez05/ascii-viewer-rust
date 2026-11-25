@@ -17,7 +17,7 @@ impl Canvas {
         }
     }
 
-    pub fn set(&mut self, x:i32, y:i32, z: f32, c: char){
+    pub fn set(&mut self, x: i32, y: i32, z: f32, c: char) {
         if x < 0 || y < 0 || x >= self.width as i32 || y >= self.height as i32 {
             return;
         }
@@ -51,12 +51,12 @@ mod tests {
     #[test]
     fn depth_test() {
         let mut c = Canvas::new(4, 3);
-        c.set(1, 1, 5.0, 'f');   // far
-        c.set(1, 1, 2.0, 'n');   // near: replaces it
-        c.set(1, 1, 9.0, 'x');   // farther: ignored
+        c.set(1, 1, 5.0, 'f'); // far
+        c.set(1, 1, 2.0, 'n'); // near: replaces it
+        c.set(1, 1, 9.0, 'x'); // farther: ignored
         assert_eq!(c.chars[1 * 4 + 1], 'n');
 
-        c.set(-1, 0, 1.0, '!');  // off-screen: ignored, no panic
+        c.set(-1, 0, 1.0, '!'); // off-screen: ignored, no panic
         c.set(4, 0, 1.0, '!');
         assert!(!c.chars.contains(&'!'));
     }
